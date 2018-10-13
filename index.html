@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .head {
+            position: relative;
+            height: 50px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #000;
+            font-size: 40px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .score {
+            position: absolute;
+            top: 15px;
+            left: 600px;
+            /*width: 100px;*/
+            height: 30px;
+            line-height: 30px;
+        }
+        .button{
+            position: absolute;
+            left: 1160px;
+            top: 15px;
+            /*width: 200px;*/
+        }
+        .button input{
+            margin: 5px;
+            padding: 0 5px;
+        }
+        .map {
+            width: 800px;
+            height: 600px;
+            background-color: #ccc;
+            position: relative;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+<div class="head">
+    <h1>简单贪吃蛇</h1>
+    <div class="score" id="q">分数：0</div>
+    <div class="button" id="btn">
+        <input type="button" class="start" value="开始"/>
+        <input type="button" class="suspend" value="暂停"/>
+        <input type="button" class="end" value="结束"/>
+    </div>
+</div>
+
+<div class="map" id="map"></div>
+<script src="Food.js"></script>
+<script src="Snake.js"></script>
+<script src="Game.js"></script>
+<script>
+    //获得开始暂停及结束三个按键
+    var btn=document.getElementById("btn").children;
+    //预加载一个游戏，等开始命令
+    var gm = new Game(document.querySelector(".map"));
+    //游戏状态,默认没运行，false
+    var state=false;
+    //开始按键
+    btn[0].onclick= function () {
+        //初始化游戏对象
+        var gm = new Game(document.querySelector(".map"));
+        gm.init();
+        state=true;
+        if(btn[1].value=="继续") {
+            btn[1].value = "暂停";
+        }
+    };
+    //暂停游戏
+    btn[1].onclick= function () {
+        if(state==true){
+            if(this.value=="暂停"){
+                btn[1].value="继续";
+                clearInterval(Game.timeId);
+            }else if(this.value=="继续"){
+                btn[1].value="暂停";
+                gm.runSnake(gm.food, gm.map);
+            }
+        }
+    };
+    //结束游戏
+    btn[2].onclick= function () {
+        if(state==true){
+            var gm = new Game(document.querySelector(".map"));
+            gm.init();
+            clearInterval(Game.timeId);
+            if(btn[1].value=="继续") {
+                btn[1].value = "暂停";
+            }
+            state=false;
+        }
+    };
+</script>
+</body>
+</html>
